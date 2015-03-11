@@ -1,0 +1,62 @@
+---
+title: 'The CLT and the exponential distribution'
+author: "JoeriW"
+date: "Wednesday, March 11, 2015"
+output: html_document
+---
+
+###overview
+We'll investigate the distribution of 40 variables drawn from an exponential distribution (with a lambda of 0.2)
+by comparing the sample mean to the theoretical mean, show how variable the sample is (via variance) and compare it to 
+theoretical variance and demonstrate the obtained distribution is approximately normal
+
+###simulation
+
+The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. Lambda will be set
+**0.2** for all the simulations. The number of simulations is **1000**
+
+set the parameters:
+```{r}
+nosim = 1000
+lambda = 0.2
+noexp = 40
+```
+
+create a data frame containing the simulated data:
+```{r}
+dat <- data.frame(
+        x = c(apply(matrix(rexp(nosim*noexp,lambda),nosim),1,mean))
+        )
+```
+
+####Sample Mean versus Theoretical Mean:
+
+calculate the sample mean and the theoretical mean and store them in a data.frame (in order to plot the legend in ggplot)
+```{r}
+sample.mean <- mean(dat$x)
+theo.mean <- 1/lambda
+
+vlines.df <-data.frame(
+        mean = c("theoretical","sample"),
+        value=c(theo.mean,sample.mean))
+```
+
+plot the obtained distribution and add the theoretical and sample mean on the graph:
+```{r}
+library(ggplot2)
+g <- ggplot(data = dat, aes(x = x))
+g <- g + geom_density(fill="gold", alpha=0.3, color="black")
+g <- g + geom_vline(data = vlines.df
+                    ,aes(xintercept = value
+                    ,colour = mean
+                    ,linetype = mean)
+                    ,show_guide = T
+                    ,size = 1.1)
+g <- g + scale_linetype_manual(values=c("solid", "dotted"))
+g <- g + scale_colour_manual(values = c("darkorange1","firebrick1"))
+g <- g + labs(title="Distribution")
+g
+```
+
+When lambda is **`r lambda`**, the theoretical mean of the exponential equals **`r theo.mean`** (= 1/lambda),
+the sample mean equals **`r sample.mean`**.
