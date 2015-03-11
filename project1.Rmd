@@ -54,9 +54,11 @@ g <- g + geom_vline(data = vlines.df
                     ,size = 1.1)
 g <- g + scale_linetype_manual(values=c("solid", "dotted"))
 g <- g + scale_colour_manual(values = c("darkorange1","firebrick1"))
-g <- g + labs(title="Distribution")
+g <- g + labs(title="Distribution of averages of 40 exponentials")
 g
 ```
 
-When lambda is **`r lambda`**, the theoretical mean of the exponential equals **`r theo.mean`** (= 1/lambda),
-the sample mean equals **`r sample.mean`**.
+When lambda is **`r lambda`**, the theoretical mean of the exponential equals **`r theo.mean`** (= 1/lambda). 
+The sample mean of our simulations excercise equals **`r sample.mean`**.
+
+
