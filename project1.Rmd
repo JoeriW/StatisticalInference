@@ -94,5 +94,5 @@ Both plots confirm that the distribution of the sampled data is approximately no
 
 ##Conclusion
 
-The simulations above clearly show the Central Limit Theorem, which states that the distribution of averages of independent and identically distributed variables becomes that of a normal distribution (given that the sample size is large enough).
+The simulations are a clear application of the Central Limit Theorem, which states that the distribution of averages of independent and identically distributed variables becomes that of a normal distribution (given that the sample size is large enough).
 
