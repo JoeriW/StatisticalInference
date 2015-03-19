@@ -1,0 +1,27 @@
+---
+title: "Effect of Vitaminc C on Guinea Pigs teeth growth"
+author: "JoeriW"
+date: "Thursday, March 19, 2015"
+output: html_document
+---
+####Preparatory phase
+
+load the required packages:
+```{r}
+library(datasets)
+library(lattice)
+library(plyr)
+```
+
+load the data:
+```{r}
+data(ToothGrowth)
+```
+
+####Exploratory analysis
+
+plot a box-and-wisker plot:
+```{r}
+bwplot(len~factor(dose)|supp,data=ToothGrowth)
+```
+
