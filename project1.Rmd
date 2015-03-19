@@ -1,5 +1,5 @@
 ---
-title: 'Sampling data from an exponential distribution: case study'
+title: 'The CLT applied on an exponential distribution: case study'
 author: "JoeriW"
 date: "Wednesday, March 11, 2015"
 output: word_document
