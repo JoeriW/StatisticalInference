@@ -1,27 +1,110 @@
 ---
-title: "Effect of Vitaminc C on Guinea Pigs teeth growth"
+title: "Effect of Vitamin C on Guinea Pigs teeth growth"
 author: "JoeriW"
-date: "Thursday, March 19, 2015"
-output: html_document
+output: word_document
 ---
+####Introduction
+
+The ToothGrowth data contains the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5,1 and 2mg) with each of 2 delivery methods: Oranje Juice (OJ) or Asorbic Acid (VC). 
+
 ####Preparatory phase
 
 load the required packages:
 ```{r}
 library(datasets)
 library(lattice)
-library(plyr)
 ```
 
-load the data:
+load the data and indicate that dose is to be considered a factor:
 ```{r}
 data(ToothGrowth)
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
 ```
+
+####Data Summary
+```{r}
+summary(ToothGrowth)
+```
+
+The dataset doesn't contain any missing values. "len" is a numerical variable. "supp" is a factor with 2 levels (OJ and VC),"dose" is also a factor with 3 levels (0.5,1 and 2)
 
 ####Exploratory analysis
 
-plot a box-and-wisker plot:
+The box-and-wisker plot below seems to indicate that for a given supplement the tooth lenghth increases as the dose increases. Additionally, when comparing between the supplements, the plot seems to indicate that for 0.5mg and 1mg doses of Vitamin C the impact on tooth length is higher when delivered via orange juice. For 2mg doses there seems to be no significant difference between both supplements.
+
 ```{r}
-bwplot(len~factor(dose)|supp,data=ToothGrowth)
+bwplot(len~dose|supp,data=ToothGrowth)
 ```
+
+
+####Confidence intervals
+
+Create subsets based on unique combination of supplement and dose (cfr annex)
+```{r}
+OJ_0.5 <- subset(ToothGrowth,supp == "OJ" & dose == 0.5)
+OJ_1 <- subset(ToothGrowth,supp == "OJ" & dose == 1)
+OJ_2 <- subset(ToothGrowth,supp == "OJ" & dose == 2)
+VC_0.5 <- subset(ToothGrowth,supp == "VC" & dose == 0.5)
+VC_1 <- subset(ToothGrowth,supp == "VC" & dose == 1)
+VC_2 <- subset(ToothGrowth,supp == "VC" & dose == 2)
+```
+
+#####Impact of dose, given the supplement
+
+In a first series of tests we'll verify if there is a signifcant impact of the dose (given a certain supplement) on the length of the teeth.
+
+$H_{0}: \mu_{OJ,\ 1mg} = \mu_{OJ,\ 0.5mg}$
+```{r}
+t.test(OJ_1$len,OJ_0.5$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+
+$H_{0}: \mu_{OJ,\ 2mg} = \mu_{OJ,\ 1mg}$
+```{r}
+t.test(OJ_2$len,OJ_1$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+
+$H_{0}: \mu_{VC,\ 1mg} = \mu_{VC,\ 0.5mg}$
+```{r}
+t.test(VC_1$len,VC_0.5$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+
+$H_{0}: \mu_{VC,\ 2mg} = \mu_{VC,\ 1mg}$
+```{r}
+t.test(VC_2$len,VC_1$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+
+For all 4 test above,as the 95% confidence interval ***does not*** contain 0, we ***reject*** the null hypothesis that the difference of both population means is 0.
+
+#####Impact of supplement, given the dose
+
+In the second serie we'll test whether there is an impact of the chosen supplement (given a certain dose)
+
+$H_{0}: \mu_{OJ,\ 0.5mg} = \mu_{VC,\ 0.5mg}$
+```{r}
+t.test(OJ_0.5$len,VC_0.5$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+$H_{0}: \mu_{OJ,\ 1mg} = \mu_{VC,\ 1mg}$
+```{r}
+t.test(OJ_1$len,VC_1$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+$H_{0}: \mu_{OJ,\ 1mg} = \mu_{VC,\ 1mg}$
+```{r}
+t.test(OJ_2$len,VC_2$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
+```
+
+For the first 2 test,as the 95% confidence interval ***does not*** contain 0, we ***reject*** the null hypothesis that the difference of both population means is 0. However, for the last confidence interval, as the 95% confidence interval ***does*** contain 0, we ***can't reject*** the null hypothesis that the difference of both population means is 0
+
+####Assumptions
+
+* 60 Guinea pigs were randomly assigned into groups of dosage and supplement (populations are unpaired)
+* variances between the different populations are unequal
+* given the low sample size a Student t-distribution is used
+* the length variable is assumed to be independent and identically distributed
+
+####Conclusion
+1. For a given supplement, a higher dosage does have impact on the length of the teeth with a higher dosage apparently translating into longer teeth.  
+
+2. Orange juice seems to be more effective for dosages of 0.5mg and 1mg than ascorbic acid. For dosages of 2mg there seems to be no significant difference between both delivery methods.
+
+
 
