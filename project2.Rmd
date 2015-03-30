@@ -87,7 +87,7 @@ $H_{0}: \mu_{OJ,\ 1mg} = \mu_{VC,\ 1mg}$
 ```{r}
 t.test(OJ_1$len,VC_1$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
 ```
-$H_{0}: \mu_{OJ,\ 1mg} = \mu_{VC,\ 1mg}$
+$H_{0}: \mu_{OJ,\ 2mg} = \mu_{VC,\ 2mg}$
 ```{r}
 t.test(OJ_2$len,VC_2$len,paired = FALSE,var.equal = FALSE)$conf.int[1:2]
 ```
